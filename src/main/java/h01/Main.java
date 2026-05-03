@@ -62,7 +62,19 @@ public class Main {
         World.setSize(worldWidth, worldHeight);
 
         // Feld für Boxenstopp
-        World.getGlobalWorld().getField(worldWidth == 7 ? 2 : 3,2).setFieldColor(Color.MAGENTA);
+        World.getGlobalWorld().getField(worldWidth == 7 ? 2 : 3,2).setFieldColor(Color.ORANGE);
+        World.placeHorizontalWall(worldWidth == 7 ? 2 : 3, 2);
+        World.placeHorizontalWall(worldWidth == 7 ? 2 : 3, 1);
+        World.placeVerticalWall(worldWidth == 7 ? 1 : 2, 2);
+
+        // Zielfelder
+        World.getGlobalWorld().getField(worldWidth == 7 ? 3 : 4,worldHeight-1).setFieldColor(Color.BLUE);
+        World.placeVerticalWall(worldWidth == 7 ? 2 : 3, worldHeight-1);
+        World.placeVerticalWall(worldWidth == 7 ? 3 : 4, worldHeight-1);
+
+        World.getGlobalWorld().getField(worldWidth-1,worldHeight/2).setFieldColor(Color.RED);
+        World.placeHorizontalWall(worldWidth-1, worldHeight/2);
+        World.placeHorizontalWall(worldWidth-1, worldHeight/2-1);
 
         World.setDelay(delay);
         World.setVisible(true);
