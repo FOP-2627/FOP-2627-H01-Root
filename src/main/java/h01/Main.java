@@ -12,12 +12,14 @@ import java.awt.*;
  */
 public class Main {
 
+    public static int runToSubtask = -1;
     public static int delay = 100;
     public static int worldHeight;
     public static int worldWidth;
 
     public static void main(String[] args) {
-        setupWorld(); //DO NOT TOUCH
+        //Do Not Touch the following three lines
+        setupWorld();
         Robot redRob = new Robot(1, 4, Direction.RIGHT, 7, RobotFamily.SQUARE_RED);
         Robot blueRob = new Robot(worldWidth == 7 ? 3 : 4, 1, Direction.UP, 1, RobotFamily.SQUARE_BLUE);
 
@@ -28,6 +30,8 @@ public class Main {
         Robot redRob2 = redRob;
         redRob2.putCoin();
         redRob2.move();
+
+        if (runToSubtask == 0) return; // DO NOT TOUCH
 
         //TODO: H01.2 - eine Referenz für mehrere Roboter
         blueRob.putCoin();
@@ -42,11 +46,15 @@ public class Main {
         blueRob.putCoin();
         blueRob.move();
 
+        if (runToSubtask == 1) return; // DO NOT TOUCH
+
         //TODO: H01.3
         while(redRob.isFrontClear()){
             redRob.putCoin();
             redRob.move();
         }
+
+        if (runToSubtask == 2) return; // DO NOT TOUCH
 
         //TODO: H01.4
         for(int i = 0; i < 5; i++){
