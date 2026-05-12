@@ -12,8 +12,10 @@ import java.awt.*;
  */
 public class Main {
 
-    public static int runToSubtask = -1;
     public static int delay = 100;
+
+    @DoNotTouch
+    public static int runToSubtask = -1;
     public static int worldHeight;
     public static int worldWidth;
 
