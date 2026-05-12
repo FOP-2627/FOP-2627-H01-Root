@@ -19,8 +19,8 @@ public class H01_RubricProviderPrivate implements RubricProvider {
         .maxPoints(1)
         .minPoints(0)
         .addChildCriteria(criterion(
-            "Der Roboter wird korrekt bewegt. " +
-                "Anschließend wird ein neuer Roboter erstellt und über dieselbe (alte) Referenz korrekt bewegt."))
+            "Der Roboter wird korrekt bewegt. Anschließend wird ein neuer Roboter erstellt " +
+                "und über dieselbe (alte) Referenz korrekt bewegt."))
         .build();
 
     private static final Criterion H1_3 = Criterion.builder()
@@ -28,19 +28,21 @@ public class H01_RubricProviderPrivate implements RubricProvider {
         .maxPoints(1)
         .minPoints(0)
         .addChildCriteria(criterion(
-            "Der Roboter legt mit genau einer While-Schleife jeweils eine Münze auf allen geforderten Feldern ab, ohne zu crashen."))
+            "Der Roboter legt mit genau einer While-Schleife " +
+                "jeweils eine Münze auf allen geforderten Feldern ab, ohne zu crashen."))
         .build();
 
     private static final Criterion H1_4 = Criterion.builder()
         .shortDescription("H1.4 | For-Schleife")
         .maxPoints(1)
         .minPoints(0)
-        .addChildCriteria(criterion((
-            "Der Roboter legt mit genau einer For-Schleife jeweil eine Münze auf allen geforderten Feldern ab, ohne zu crashen.")))
+        .addChildCriteria(criterion(
+            "Der Roboter legt mit genau einer For-Schleife " +
+                "jeweils eine Münze auf allen geforderten Feldern ab, ohne zu crashen."))
         .build();
 
     private static final Rubric RUBRIC = Rubric.builder()
-        .title("HXX | Rubric tutorial")
+        .title("H01 | Crossover")
         .addChildCriteria(H1_1, H1_2, H1_3, H1_4)
         .build();
 
