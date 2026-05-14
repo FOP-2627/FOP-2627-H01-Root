@@ -16,6 +16,7 @@ public class Main {
 
     @DoNotTouch
     public static int runToSubtask = -1;
+    public static boolean isVisible = true;
     public static int worldHeight;
     public static int worldWidth;
 
@@ -87,6 +88,6 @@ public class Main {
         World.placeHorizontalWall(worldWidth-1, worldHeight/2-1);
 
         World.setDelay(delay);
-        World.setVisible(true);
+        World.setVisible(isVisible);
     }
 }
