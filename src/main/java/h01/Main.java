@@ -21,7 +21,7 @@ public class Main {
         Robot redRob = new Robot(1, 4, Direction.RIGHT, 7, RobotFamily.SQUARE_RED);
         Robot blueRob = new Robot(worldWidth == 7 ? 3 : 4, 1, Direction.UP, 1, RobotFamily.SQUARE_BLUE);
 
-        //TODO: H01.1 - mehrere Referenzen auf einen Robot
+        //TODO: H1.1 - mehrere Referenzen auf einen Robot
         redRob.putCoin();
         redRob.move();
 
@@ -29,7 +29,7 @@ public class Main {
         redRob2.putCoin();
         redRob2.move();
 
-        //TODO: H01.2 - eine Referenz für mehrere Roboter
+        //TODO: H1.2 - eine Referenz für mehrere Roboter
         blueRob.putCoin();
         blueRob.move();
 
@@ -42,13 +42,13 @@ public class Main {
         blueRob.putCoin();
         blueRob.move();
 
-        //TODO: H01.3
+        //TODO: H1.3
         while(redRob.isFrontClear()){
             redRob.putCoin();
             redRob.move();
         }
 
-        //TODO: H01.4
+        //TODO: H1.4
         for(int i = 0; i < 5; i++){
             blueRob.putCoin();
             blueRob.move();
