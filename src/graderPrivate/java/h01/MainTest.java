@@ -43,16 +43,17 @@ public class MainTest {
         try {
             Main.runToSubtask = 0;
             Main.main(null);
-            List<Robot> robots = World.getGlobalWorld().getAllFieldEntities()
+
+            List<Robot> redRobots = World.getGlobalWorld().getAllFieldEntities()
                 .stream()
                 .filter(r -> r instanceof Robot)
                 .map(r -> (Robot) r)
+                .filter(robot -> robot.getRobotFamily() == RobotFamily.SQUARE_RED)
                 .toList();
 
-            Robot red = robots.stream()
-                .filter(robot -> robot.getRobotFamily() == RobotFamily.SQUARE_RED)
-                .findFirst()
-                .orElse(null);
+            assertEquals(1, redRobots.size(), emptyContext(), r ->
+                "Expected exactly one red robot. Did you create a new instance instead of a new reference?");
+            Robot red = redRobots.getFirst();
 
             assertNotNull(red, emptyContext(), r -> "The red robot was not found!");
 
@@ -79,26 +80,26 @@ public class MainTest {
         try {
             Main.runToSubtask = 1;
             Main.main(null);
-            List<Robot> robots = World.getGlobalWorld().getAllFieldEntities()
+
+            List<Robot> blue = World.getGlobalWorld().getAllFieldEntities()
                 .stream()
                 .filter(r -> r instanceof Robot)
                 .map(r -> (Robot) r)
+                .filter(robot -> robot.getRobotFamily() == RobotFamily.SQUARE_BLUE)
                 .toList();
 
-            Robot[] blue = robots.stream()
-                .filter(robot -> robot.getRobotFamily() == RobotFamily.SQUARE_BLUE).toArray(Robot[]::new);
-
+            assertEquals(2, blue.size(), emptyContext(), r -> "Expected exactly two blue robots");
             assertNotNull(blue, emptyContext(), r -> "The blue robot was not found!");
 
             int pos = Main.worldWidth == 7 ? 3 : 4;
 
             // position check boxen stop
-            assertEquals(pos - 1, blue[0].getX(), emptyContext(), r -> "blueRob should be at X=3");
-            assertEquals(2, blue[0].getY(), emptyContext(), r -> "blueRob should be at Y=2");
+            assertEquals(pos - 1, blue.get(0).getX(), emptyContext(), r -> "blueRob should be at X=3");
+            assertEquals(2, blue.get(0).getY(), emptyContext(), r -> "blueRob should be at Y=2");
 
             // positon check blue2
-            assertEquals(pos, blue[1].getX(), emptyContext(), r -> "blueRob should be at X=3");
-            assertEquals(3, blue[1].getY(), emptyContext(), r -> "blueRob should be at Y=2");
+            assertEquals(pos, blue.get(1).getX(), emptyContext(), r -> "blueRob should be at X=3");
+            assertEquals(3, blue.get(1).getY(), emptyContext(), r -> "blueRob should be at Y=2");
 
             // coin Check
             long coinsAt14 = World.getGlobalWorld().getField(pos, 1).getEntities().stream()
@@ -119,21 +120,22 @@ public class MainTest {
         try {
             Main.runToSubtask = 2;
             Main.main(null);
-            List<Robot> robots = World.getGlobalWorld().getAllFieldEntities()
+
+            List<Robot> redRobots = World.getGlobalWorld().getAllFieldEntities()
                 .stream()
                 .filter(r -> r instanceof Robot)
                 .map(r -> (Robot) r)
+                .filter(robot -> robot.getRobotFamily() == RobotFamily.SQUARE_RED)
                 .toList();
 
-            Robot red = robots.stream()
-                .filter(robot -> robot.getRobotFamily() == RobotFamily.SQUARE_RED)
-                .findFirst()
-                .orElse(null);
+            assertEquals(1, redRobots.size(), emptyContext(), r ->
+                "Expected exactly one red robot. Did you create a new instance instead of a new reference?");
+            Robot red = redRobots.getFirst();
 
             assertNotNull(red, emptyContext(), r -> "The red robot was not found!");
 
             // position check
-            assertEquals(Main.worldWidth - 1, red.getX(), emptyContext(), r -> "redRob should be at X=%d".formatted(Main.worldWidth));
+            assertEquals(Main.worldWidth - 1, red.getX(), emptyContext(), r -> "redRob should be at X=%d".formatted(Main.worldWidth - 1));
             assertEquals(4, red.getY(), emptyContext(), r -> "redRob should be at Y=4");
 
             // coin Check
@@ -169,16 +171,16 @@ public class MainTest {
         try {
             Main.runToSubtask = 3;
             Main.main(null);
-            List<Robot> robots = World.getGlobalWorld().getAllFieldEntities()
+
+            List<Robot> blue = World.getGlobalWorld().getAllFieldEntities()
                 .stream()
                 .filter(r -> r instanceof Robot)
                 .map(r -> (Robot) r)
+                .filter(robot -> robot.getRobotFamily() == RobotFamily.SQUARE_BLUE)
                 .toList();
 
-            Robot[] blue = robots.stream()
-                .filter(robot -> robot.getRobotFamily() == RobotFamily.SQUARE_BLUE).toArray(Robot[]::new);
-
-            Robot blue1 = blue[1];
+            assertEquals(2, blue.size(), emptyContext(), r -> "Expected exactly two blue robots");
+            Robot blue1 = blue.get(1);
 
             assertNotNull(blue1, emptyContext(), r -> "The blue robot was not found!");
 
