@@ -280,7 +280,7 @@ public class MainTest {
                             .add("Variable name", localVariable.getSimpleName())
                             .add("Variable type", localVariable.getType().getSimpleName())
                             .build(),
-                        r -> "You introduced an additional reference variable in H01.2, but you should reassign the existing one!");
+                        r -> "You introduced an additional reference variable in H1.2, but you should reassign the existing one!");
                 }
             }
         }

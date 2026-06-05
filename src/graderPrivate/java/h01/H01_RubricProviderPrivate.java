@@ -26,7 +26,7 @@ public class H01_RubricProviderPrivate implements RubricProvider {
         .minPoints(0)
         .addChildCriteria(
             criterion(
-                "BlueRob wird korrekt bewegt. Anschließend wird ein neuer Roboter erstellt und über dieselbe (alte) Referenz korrekt bewegt.",
+                "BlueRob wird korrekt bewegt. Anschließend wird ein neuer Roboter erstellt und über dieselbe ([[[blueRob]]]) Referenz korrekt bewegt.",
                 1,
                 JUnitTestRef.ofMethod(() -> MainTest.class.getDeclaredMethod("testBlueRob0"))),
             criterion("Die verbindliche Anforderung wurde eingehalten",
@@ -41,7 +41,7 @@ public class H01_RubricProviderPrivate implements RubricProvider {
         .minPoints(0)
         .addChildCriteria(
             criterion(
-                "RedRob legt mit genau einer While-Schleife jeweils eine Münze auf allen geforderten Feldern ab, ohne zu crashen.",
+                "RedRob legt mit genau einer [[[while]]]-Schleife jeweils eine Münze auf allen geforderten Feldern ab, ohne zu crashen.",
                 1,
                 JUnitTestRef.ofMethod(() -> MainTest.class.getDeclaredMethod("testRedRob1"))),
             criterion("Die verbindliche Anforderung wurde eingehalten",
@@ -56,7 +56,7 @@ public class H01_RubricProviderPrivate implements RubricProvider {
         .minPoints(0)
         .addChildCriteria(
             criterion(
-                "BlueRob legt mit genau einer For-Schleife jeweils eine Münze auf allen geforderten Feldern ab, ohne zu crashen.",
+                "BlueRob legt mit genau einer [[[for]]]-Schleife jeweils eine Münze auf allen geforderten Feldern ab, ohne zu crashen.",
                 1,
                 JUnitTestRef.ofMethod(() -> MainTest.class.getDeclaredMethod("testBlueRob1"))),
             criterion("Die verbindliche Anforderung wurde eingehalten",
@@ -65,12 +65,16 @@ public class H01_RubricProviderPrivate implements RubricProvider {
         )
         .build();
 
-    private static final Rubric RUBRIC = Rubric.builder()
-        .title("H01 | Crossover")
-        .addChildCriteria(H1_1, H1_2, H1_3, H1_4)
+    private static final Criterion SHEET_VA = Criterion.builder()
+        .shortDescription("Verbindliche Anforderung für die gesamte Hausübung")
         .addChildCriteria(criterion("Die verbindliche Anforderung wurde eingehalten",
             -1,
             JUnitTestRef.ofMethod(() -> MainTest.class.getDeclaredMethod("testVA0"))))
+        .build();
+
+    private static final Rubric RUBRIC = Rubric.builder()
+        .title("H01 | Crossover")
+        .addChildCriteria(H1_1, H1_2, H1_3, H1_4, SHEET_VA)
         .build();
 
     @Override
