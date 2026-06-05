@@ -23,6 +23,14 @@ import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.*;
 @TestForSubmission
 public class MainTest {
 
+    // TODO:
+    //  - Not really related to the tests but what's the point of choosing the world width at random? It doesn't add much to the exercise but complicates tests.
+    //  - The runToSubtask approach did not work well last year, it probably won't this year either. Needs to be replaced with own methods for each subtask.
+    //    The way it is now might also lead to mistakes in previous subtasks having effects on subtasks below.
+    //  - It looks like the tests can handle the random world width, but we should override the random value to always guarantee reproducible results
+    //    (this way we can also test both cases).
+    //  - Assertions should always provide context if there is any, e.g. world width and height or other information that helps students with debugging.
+
     private static CtMethod<?> mainMethod;
     private static List<CtIf> subtaskMarkers;
 
