@@ -1,8 +1,9 @@
+package h01;
+
 import fopbot.Coin;
 import fopbot.Robot;
 import fopbot.RobotFamily;
 import fopbot.World;
-import h01.Main;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.sourcegrade.jagr.api.rubric.TestForSubmission;
