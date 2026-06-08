@@ -1,13 +1,11 @@
 package h01;
 
-import fopbot.Coin;
-import fopbot.Robot;
-import fopbot.RobotFamily;
-import fopbot.World;
+import fopbot.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.sourcegrade.jagr.api.rubric.TestForSubmission;
 import org.tudalgo.algoutils.tutor.general.SpoonUtils;
+import org.tudalgo.algoutils.tutor.general.assertions.Context;
 import spoon.reflect.code.*;
 import spoon.reflect.declaration.CtElement;
 import spoon.reflect.declaration.CtMethod;
@@ -59,24 +57,39 @@ public class MainTest {
                 .filter(robot -> robot.getRobotFamily() == RobotFamily.SQUARE_RED)
                 .toList();
 
-            assertEquals(1, redRobots.size(), emptyContext(), r ->
+            Context context = contextBuilder()
+                .add("world height", Main.worldHeight)
+                .add("world width", Main.worldWidth)
+                .build();
+
+            assertEquals(1, redRobots.size(), context, r ->
                 "Expected exactly one red robot. Did you create a new instance instead of a new reference?");
             Robot red = redRobots.getFirst();
 
-            assertNotNull(red, emptyContext(), r -> "The red robot was not found!");
+            assertNotNull(red, context, r -> "The red robot was not found!");
+
+            context = contextBuilder()
+                .add(context)
+                .add("starting position (X|Y)", "(%d|%d)".formatted(1, 4))
+                .add("last position (X|Y) after execution", "(%d|%d)".formatted(red.getX(), red.getY()))
+                .add("starting direction", Direction.RIGHT)
+                .add("last direction", red.getDirection())
+                .add("number of coins", 7)
+                .add("number of coins after execution", red.getNumberOfCoins())
+                .build();
 
             // position check
-            assertEquals(3, red.getX(), emptyContext(), r -> "redRob should be at X=3");
-            assertEquals(4, red.getY(), emptyContext(), r -> "redRob should be at Y=4");
+            assertEquals(3, red.getX(), context, r -> "redRob should be at X=3");
+            assertEquals(4, red.getY(), context, r -> "redRob should be at Y=4");
 
             // coin Check
             long coinsAt14 = World.getGlobalWorld().getField(1, 4).getEntities().stream()
                 .filter(e -> e instanceof Coin).count();
-            assertEquals(1, (int) coinsAt14, emptyContext(), r -> "A coin should have been placed at (1,4) before the first move");
+            assertEquals(1, (int) coinsAt14, context, r -> "A coin should have been placed at (1,4) before the first move");
 
             long coinsAt24 = World.getGlobalWorld().getField(2, 4).getEntities().stream()
                 .filter(e -> e instanceof Coin).count();
-            assertEquals(1, (int) coinsAt24, emptyContext(), r -> "A coin should have been placed at (2,4) after the first move");
+            assertEquals(1, (int) coinsAt24, context, r -> "A coin should have been placed at (2,4) after the first move");
 
         } catch (Exception e) {
             fail(emptyContext(), r -> "Code execution failed with exception: " + e.getMessage());
@@ -96,27 +109,52 @@ public class MainTest {
                 .filter(robot -> robot.getRobotFamily() == RobotFamily.SQUARE_BLUE)
                 .toList();
 
-            assertEquals(2, blue.size(), emptyContext(), r -> "Expected exactly two blue robots");
-            assertNotNull(blue, emptyContext(), r -> "The blue robot was not found!");
+            Context context = contextBuilder()
+                .add("world height", Main.worldHeight)
+                .add("world width", Main.worldWidth)
+                .build();
+
+            assertEquals(2, blue.size(), context, r -> "Expected exactly two blue robots");
+            assertNotNull(blue, context, r -> "The blue robot was not found!");
+
+            Context context1 = contextBuilder()
+                .add(context)
+                .add("starting position first blueRob (X|Y)", "(%d|%d)".formatted(Main.worldWidth == 7 ? 3 : 4, 1))
+                .add("last position first blueRob (X|Y) after execution", "(%d|%d)".formatted(blue.get(0).getX(), blue.get(0).getY()))
+                .add("starting direction first blueRob", Direction.UP)
+                .add("last direction first blueRob", blue.get(0).getDirection())
+                .add("number of coins first blueRob", 1)
+                .add("number of coins first blueRob after execution", blue.get(0).getNumberOfCoins())
+                .build();
+
+            Context context2 = contextBuilder()
+                .add(context)
+                .add("starting position second blueRob (X|Y)", "(%d|%d)".formatted(Main.worldWidth / 2, 2))
+                .add("last position second blueRob (X|Y) after execution", "(%d|%d)".formatted(blue.get(1).getX(), blue.get(1).getY()))
+                .add("starting direction second blueRob", Direction.UP)
+                .add("last direction second blueRob", blue.get(1).getDirection())
+                .add("number of coins", 8)
+                .add("number of coins first blueRob after execution", blue.get(1).getNumberOfCoins())
+                .build();
 
             int pos = Main.worldWidth == 7 ? 3 : 4;
 
             // position check boxen stop
-            assertEquals(pos - 1, blue.get(0).getX(), emptyContext(), r -> "blueRob should be at X=3");
-            assertEquals(2, blue.get(0).getY(), emptyContext(), r -> "blueRob should be at Y=2");
+            assertEquals(pos - 1, blue.get(0).getX(), context1, r -> "blueRob should be at X=3");
+            assertEquals(2, blue.get(0).getY(), context1, r -> "blueRob should be at Y=2");
 
             // positon check blue2
-            assertEquals(pos, blue.get(1).getX(), emptyContext(), r -> "blueRob should be at X=3");
-            assertEquals(3, blue.get(1).getY(), emptyContext(), r -> "blueRob should be at Y=2");
+            assertEquals(pos, blue.get(1).getX(), context2, r -> "blueRob should be at X=3");
+            assertEquals(3, blue.get(1).getY(), context2, r -> "blueRob should be at Y=2");
 
             // coin Check
             long coinsAt14 = World.getGlobalWorld().getField(pos, 1).getEntities().stream()
                 .filter(e -> e instanceof Coin).count();
-            assertEquals(1, (int) coinsAt14, emptyContext(), r -> "A coin should have been placed at (%d,1) before the first move".formatted(pos));
+            assertEquals(1, (int) coinsAt14, context, r -> "A coin should have been placed at (%d,1) before the first move".formatted(pos));
 
             long coinsAt24 = World.getGlobalWorld().getField(pos, 2).getEntities().stream()
                 .filter(e -> e instanceof Coin).count();
-            assertEquals(1, (int) coinsAt24, emptyContext(), r -> "A coin should have been placed at (%d,2) after the first move".formatted(pos));
+            assertEquals(1, (int) coinsAt24, context, r -> "A coin should have been placed at (%d,2) after the first move".formatted(pos));
 
         } catch (Exception e) {
             fail(emptyContext(), r -> "Code execution failed with exception: " + e.getMessage());
@@ -136,37 +174,50 @@ public class MainTest {
                 .filter(robot -> robot.getRobotFamily() == RobotFamily.SQUARE_RED)
                 .toList();
 
-            assertEquals(1, redRobots.size(), emptyContext(), r ->
+            Context context = contextBuilder()
+                .add("world height", Main.worldHeight)
+                .add("world width", Main.worldWidth)
+                .build();
+
+            assertEquals(1, redRobots.size(), context, r ->
                 "Expected exactly one red robot. Did you create a new instance instead of a new reference?");
             Robot red = redRobots.getFirst();
 
-            assertNotNull(red, emptyContext(), r -> "The red robot was not found!");
+            assertNotNull(red, context, r -> "The red robot was not found!");
+
+            context = contextBuilder()
+                .add(context)
+                .add("last position (X|Y) after execution", "(%d|%d)".formatted(red.getX(), red.getY()))
+                .add("last direction", red.getDirection())
+                .add("number of coins", 5)
+                .add("number of coins after execution", red.getNumberOfCoins())
+                .build();
 
             // position check
-            assertEquals(Main.worldWidth - 1, red.getX(), emptyContext(), r -> "redRob should be at X=%d".formatted(Main.worldWidth - 1));
-            assertEquals(4, red.getY(), emptyContext(), r -> "redRob should be at Y=4");
+            assertEquals(Main.worldWidth - 1, red.getX(), context, r -> "redRob should be at X=%d".formatted(Main.worldWidth - 1));
+            assertEquals(4, red.getY(), context, r -> "redRob should be at Y=4");
 
             // coin Check
             long coinsAt34 = World.getGlobalWorld().getField(3, 4).getEntities().stream()
                 .filter(e -> e instanceof Coin).count();
-            assertEquals(1, (int) coinsAt34, emptyContext(), r -> "A coin should have been placed at (3,4) before the first move");
+            assertEquals(1, (int) coinsAt34, context, r -> "A coin should have been placed at (3,4) before the first move");
 
             long coinsAt44 = World.getGlobalWorld().getField(4, 4).getEntities().stream()
                 .filter(e -> e instanceof Coin).count();
-            assertEquals(1, (int) coinsAt44, emptyContext(), r -> "A coin should have been placed at (4,4) after the first move");
+            assertEquals(1, (int) coinsAt44, context, r -> "A coin should have been placed at (4,4) after the first move");
 
             long coinsAt54 = World.getGlobalWorld().getField(5, 4).getEntities().stream()
                 .filter(e -> e instanceof Coin).count();
-            assertEquals(1, (int) coinsAt54, emptyContext(), r -> "A coin should have been placed at (5,4) after the first move");
+            assertEquals(1, (int) coinsAt54, context, r -> "A coin should have been placed at (5,4) after the first move");
 
             if (Main.worldWidth == 9) {
                 long coinsAt64 = World.getGlobalWorld().getField(6, 4).getEntities().stream()
                     .filter(e -> e instanceof Coin).count();
-                assertEquals(1, (int) coinsAt64, emptyContext(), r -> "A coin should have been placed at (6,4) after the first move");
+                assertEquals(1, (int) coinsAt64, context, r -> "A coin should have been placed at (6,4) after the first move");
 
                 long coinsAt74 = World.getGlobalWorld().getField(7, 4).getEntities().stream()
                     .filter(e -> e instanceof Coin).count();
-                assertEquals(1, (int) coinsAt74, emptyContext(), r -> "A coin should have been placed at (7,4) after the first move");
+                assertEquals(1, (int) coinsAt74, context, r -> "A coin should have been placed at (7,4) after the first move");
             }
 
         } catch (Exception e) {
@@ -187,37 +238,50 @@ public class MainTest {
                 .filter(robot -> robot.getRobotFamily() == RobotFamily.SQUARE_BLUE)
                 .toList();
 
+            Context context = contextBuilder()
+                .add("world height", Main.worldHeight)
+                .add("world width", Main.worldWidth)
+                .build();
+
             assertEquals(2, blue.size(), emptyContext(), r -> "Expected exactly two blue robots");
             Robot blue1 = blue.get(1);
 
             assertNotNull(blue1, emptyContext(), r -> "The blue robot was not found!");
 
+            context = contextBuilder()
+                .add(context)
+                .add("last position (X|Y) after execution", "(%d|%d)".formatted(blue1.getX(), blue1.getY()))
+                .add("last direction", blue1.getDirection())
+                .add("number of coins", 7)
+                .add("number of coins after execution", blue1.getNumberOfCoins())
+                .build();
+
             int pos = Main.worldWidth == 7 ? 3 : 4;
 
             // position check
-            assertEquals(pos, blue1.getX(), emptyContext(), r -> "blue should be at X=%d".formatted(pos));
-            assertEquals(Main.worldHeight - 1, blue1.getY(), emptyContext(), r -> "blue should be at Y=%d".formatted(Main.worldHeight - 1));
+            assertEquals(pos, blue1.getX(), context, r -> "blue should be at X=%d".formatted(pos));
+            assertEquals(Main.worldHeight - 1, blue1.getY(), context, r -> "blue should be at Y=%d".formatted(Main.worldHeight - 1));
 
             // coin Check
             long coinsAt34 = World.getGlobalWorld().getField(pos, 3).getEntities().stream()
                 .filter(e -> e instanceof Coin).count();
-            assertEquals(1, (int) coinsAt34, emptyContext(), r -> "A coin should have been placed at (%d,3) before the first move".formatted(pos));
+            assertEquals(1, (int) coinsAt34, context, r -> "A coin should have been placed at (%d,3) before the first move".formatted(pos));
 
             long coinsAt44 = World.getGlobalWorld().getField(pos, 4).getEntities().stream()
                 .filter(e -> e instanceof Coin).count();
-            assertEquals(1, (int) coinsAt44, emptyContext(), r -> "A coin should have been placed at (%d,4) before the first move".formatted(pos));
+            assertEquals(1, (int) coinsAt44, context, r -> "A coin should have been placed at (%d,4) before the first move".formatted(pos));
 
             long coinsAt54 = World.getGlobalWorld().getField(pos, 5).getEntities().stream()
                 .filter(e -> e instanceof Coin).count();
-            assertEquals(1, (int) coinsAt54, emptyContext(), r -> "A coin should have been placed at (%d,5) before the first move".formatted(pos));
+            assertEquals(1, (int) coinsAt54, context, r -> "A coin should have been placed at (%d,5) before the first move".formatted(pos));
 
             long coinsAt64 = World.getGlobalWorld().getField(pos, 6).getEntities().stream()
                 .filter(e -> e instanceof Coin).count();
-            assertEquals(1, (int) coinsAt64, emptyContext(), r -> "A coin should have been placed at (%d,6) before the first move".formatted(pos));
+            assertEquals(1, (int) coinsAt64, context, r -> "A coin should have been placed at (%d,6) before the first move".formatted(pos));
 
             long coinsAt74 = World.getGlobalWorld().getField(pos, 7).getEntities().stream()
                 .filter(e -> e instanceof Coin).count();
-            assertEquals(1, (int) coinsAt74, emptyContext(), r -> "A coin should have been placed at (%d,7) before the first move".formatted(pos));
+            assertEquals(1, (int) coinsAt74, context, r -> "A coin should have been placed at (%d,7) before the first move".formatted(pos));
 
 
         } catch (Exception e) {
