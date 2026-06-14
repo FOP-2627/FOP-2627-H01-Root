@@ -17,7 +17,10 @@ public class H01_RubricProviderPrivate implements RubricProvider {
             criterion(
                 "RedRob wird korrekt über die vorhandene Referenz und eine neu erstellte Referenz bewegt.",
                 1,
-                JUnitTestRef.ofMethod(() -> MainTest.class.getDeclaredMethod("testRedRob0"))))
+                JUnitTestRef.and(
+                    JUnitTestRef.ofMethod(() -> MainTest.class.getDeclaredMethod("testH01_1"))),
+                    JUnitTestRef.ofMethod(() -> MainTest.class.getDeclaredMethod("testH01_1_oneInstance")))
+        )
         .build();
 
     private static final Criterion H1_2 = Criterion.builder()
@@ -28,10 +31,10 @@ public class H01_RubricProviderPrivate implements RubricProvider {
             criterion(
                 "BlueRob wird korrekt bewegt. Anschließend wird ein neuer Roboter erstellt und über dieselbe ([[[blueRob]]]) Referenz korrekt bewegt.",
                 1,
-                JUnitTestRef.ofMethod(() -> MainTest.class.getDeclaredMethod("testBlueRob0"))),
+                JUnitTestRef.ofMethod(() -> MainTest.class.getDeclaredMethod("testH01_2"))),
             criterion("Die verbindliche Anforderung wurde eingehalten",
                 -1,
-                JUnitTestRef.ofMethod(() -> MainTest.class.getDeclaredMethod("testVA1")))
+                JUnitTestRef.ofMethod(() -> MainTest.class.getDeclaredMethod("testH01_2_noNewLocalVariableVA2")))
         )
         .build();
 
@@ -43,10 +46,10 @@ public class H01_RubricProviderPrivate implements RubricProvider {
             criterion(
                 "RedRob legt mit genau einer [[[while]]]-Schleife jeweils eine Münze auf allen geforderten Feldern ab, ohne zu crashen.",
                 1,
-                JUnitTestRef.ofMethod(() -> MainTest.class.getDeclaredMethod("testRedRob1"))),
+                JUnitTestRef.ofMethod(() -> MainTest.class.getDeclaredMethod("testH01_3"))),
             criterion("Die verbindliche Anforderung wurde eingehalten",
                 -1,
-                JUnitTestRef.ofMethod(() -> MainTest.class.getDeclaredMethod("testVA2")))
+                JUnitTestRef.ofMethod(() -> MainTest.class.getDeclaredMethod("testH01_3_usesWhileVA3")))
         )
         .build();
 
@@ -58,10 +61,10 @@ public class H01_RubricProviderPrivate implements RubricProvider {
             criterion(
                 "BlueRob legt mit genau einer [[[for]]]-Schleife jeweils eine Münze auf allen geforderten Feldern ab, ohne zu crashen.",
                 1,
-                JUnitTestRef.ofMethod(() -> MainTest.class.getDeclaredMethod("testBlueRob1"))),
+                JUnitTestRef.ofMethod(() -> MainTest.class.getDeclaredMethod("testH01_4"))),
             criterion("Die verbindliche Anforderung wurde eingehalten",
                 -1,
-                JUnitTestRef.ofMethod(() -> MainTest.class.getDeclaredMethod("testVA3")))
+                JUnitTestRef.ofMethod(() -> MainTest.class.getDeclaredMethod("testH01_4_usesForVA4")))
         )
         .build();
 
@@ -69,7 +72,7 @@ public class H01_RubricProviderPrivate implements RubricProvider {
         .shortDescription("Verbindliche Anforderung für die gesamte Hausübung")
         .addChildCriteria(criterion("Die verbindliche Anforderung wurde eingehalten",
             -1,
-            JUnitTestRef.ofMethod(() -> MainTest.class.getDeclaredMethod("testVA0"))))
+            JUnitTestRef.ofMethod(() -> MainTest.class.getDeclaredMethod("testNoIfOrTernaryVA0"))))
         .build();
 
     private static final Rubric RUBRIC = Rubric.builder()
