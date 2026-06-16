@@ -20,7 +20,9 @@ public class Main {
 
     @DoNotTouch
     public static void main(String[] args) {
-        // Do Not Touch the following seven lines
+        // Do not touch the following lines
+        worldWidth = (Math.random() < 0.5) ? 7 : 9;
+        worldHeight = 9;
         setupWorld();
         Robot redRob = new Robot(1, 4, Direction.RIGHT, 7, RobotFamily.SQUARE_RED);
         Robot blueRob = new Robot(worldWidth == 7 ? 3 : 4, 1, Direction.UP, 1, RobotFamily.SQUARE_BLUE);
@@ -81,8 +83,6 @@ public class Main {
 
     @DoNotTouch
     public static void setupWorld() {
-        worldWidth = (Math.random() < 0.5) ? 7 : 9;
-        worldHeight = 9;
         World.setSize(worldWidth, worldHeight);
 
         // Feld für Boxenstopp

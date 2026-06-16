@@ -21,21 +21,18 @@ import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.*;
 @TestForSubmission
 public class MainTest {
 
-    // TODO:
-    //  - Not really related to the tests but what's the point of choosing the world width at random? It doesn't add much to the exercise but complicates tests.
-    //  - The runToSubtask approach did not work well last year, it probably won't this year either. Needs to be replaced with own methods for each subtask.
-    //    The way it is now might also lead to mistakes in previous subtasks having effects on subtasks below.
-    //  - It looks like the tests can handle the random world width, but we should override the random value to always guarantee reproducible results
-    //    (this way we can also test both cases).
-    //  - Assertions should always provide context if there is any, e.g. world width and height or other information that helps students with debugging.
-
     private static final CtType<?> CT_TYPE = SpoonUtils.getType("h01.Main");
 
     @BeforeAll
     public static void setup() {
         Main.delay = 0;
         Main.isVisible = false;
+    }
 
+    private void setupWorld(int width) {
+        Main.worldHeight = 9;
+        Main.worldWidth = width;
+        Main.setupWorld();
     }
 
     private Context worldContext(int worldWidth) {
@@ -55,10 +52,9 @@ public class MainTest {
     @ParameterizedTest
     @ValueSource(ints = {7, 9})
     public void testH1_1(int width) {
+        setupWorld(width);
         Robot redRob = new Robot(1, 4, Direction.RIGHT, 7, RobotFamily.SQUARE_RED);
         Context ctx = worldContext(width);
-        Main.worldWidth = width;
-        Main.worldHeight = 9;
 
         try {
             Main.h1_1(redRob);
@@ -99,10 +95,9 @@ public class MainTest {
     @ParameterizedTest
     @ValueSource(ints = {7, 9})
     public void testH1_2(int width) {
+        setupWorld(width);
         Robot blueRob = new Robot(width == 7 ? 3 : 4, 1, Direction.UP, 1, RobotFamily.SQUARE_BLUE);
         Context ctx = worldContext(width);
-        Main.worldWidth = width;
-        Main.worldHeight = 9;
 
         try {
             Robot result = Main.h1_2(blueRob);
@@ -160,10 +155,8 @@ public class MainTest {
     @ParameterizedTest
     @ValueSource(ints = {7, 9})
     public void testH1_3(int width) {
+        setupWorld(width);
         Context ctx = worldContext(width);
-        Main.worldWidth = width;
-        Main.worldHeight = 9;
-        World.setSize(width, 9);
 
         Robot redRob = new Robot(3, 4, Direction.RIGHT, 5, RobotFamily.SQUARE_RED);
 
@@ -209,10 +202,8 @@ public class MainTest {
     @ParameterizedTest
     @ValueSource(ints = {7, 9})
     public void testH1_4(int width) {
+        setupWorld(width);
         Context ctx = worldContext(width);
-        Main.worldWidth = width;
-        Main.worldHeight = 9;
-        World.setSize(width, 9);
 
         Robot blueRob2 = new Robot(width == 7 ? 3 : 4, 3, Direction.UP, 7, RobotFamily.SQUARE_BLUE);
         int pos = width == 7 ? 3 : 4;
