@@ -77,7 +77,7 @@ public class MainTest {
             assertEquals(1, (int) coinsAt24, ctx,
                 r -> "A coin should have been placed at (2,4)");
         } catch (Exception e) {
-            System.err.printf("h1_1(Robot redRob) threw an unexpected exception: %s%n", e);
+            fail(e, emptyContext(), r -> "h1_1(Robot redRob) threw an unexpected exception");
         }
     }
 
@@ -131,7 +131,7 @@ public class MainTest {
                 r -> "A coin from the second robot should be located at (%d,2)".formatted(Main.worldWidth / 2));
 
         } catch (Exception e) {
-            System.err.printf("h1_2(Robot blueRob) threw an unexpected exception: %s%n", e);
+            fail(e, emptyContext(), r -> "h1_2(Robot blueRob) threw an unexpected exception");
         }
     }
 
@@ -180,7 +180,7 @@ public class MainTest {
             }
 
         } catch (Exception e) {
-            System.err.printf("h1_3(Robot redRob) threw an unexpected exception: %s%n", e);
+            fail(e, emptyContext(), r -> "h1_3(Robot redRob) threw an unexpected exception");
         }
     }
 
@@ -229,7 +229,7 @@ public class MainTest {
             }
 
         } catch (Exception e) {
-            System.err.printf("h1_4(Robot blueRob2) threw an unexpected exception: %s%n", e);
+            fail(e, emptyContext(), r -> "h1_4(Robot blueRob2) threw an unexpected exception");
         }
     }
 
