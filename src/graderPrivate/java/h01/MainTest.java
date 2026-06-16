@@ -144,7 +144,7 @@ public class MainTest {
     public void testH1_2_noNewLocalVariableVA2() {
         CtMethod<?> method = getMethod("h1_2");
         List<CtLocalVariable<?>> locals = method.filterChildren(e -> e instanceof CtLocalVariable<?> lv
-            && !((CtLocalVariable<?>) lv).getType().isPrimitive()).list();
+            && !lv.getType().isPrimitive()).list();
 
         if (!locals.isEmpty()) {
             assertEquals(0, locals.size(), contextBuilder()
@@ -195,7 +195,7 @@ public class MainTest {
     public void testH1_3_usesWhileVA3() {
         CtMethod<?> method = getMethod("h1_3");
         List<CtWhile> whileLoops = method.filterChildren(e -> e instanceof CtWhile).list();
-        assertTrue(whileLoops.size() > 0, emptyContext(),
+        assertFalse(whileLoops.isEmpty(), emptyContext(),
             r -> "H1.3 must contain a while loop");
 
         List<CtFor> forLoops = method.filterChildren(e -> e instanceof CtFor).list();
@@ -246,7 +246,7 @@ public class MainTest {
     public void testH1_4_usesForVA4() {
         CtMethod<?> method = getMethod("h1_4");
         List<CtFor> forLoops = method.filterChildren(e -> e instanceof CtFor).list();
-        assertTrue(forLoops.size() > 0, emptyContext(),
+        assertFalse(forLoops.isEmpty(), emptyContext(),
             r -> "H1.4 must contain a for loop");
 
         List<CtWhile> whileLoops = method.filterChildren(e -> e instanceof CtWhile).list();

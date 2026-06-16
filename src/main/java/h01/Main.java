@@ -5,7 +5,7 @@ import fopbot.Robot;
 import org.tudalgo.algoutils.student.annotation.DoNotTouch;
 import org.tudalgo.algoutils.student.annotation.StudentImplementationRequired;
 
-import java.awt.*;
+import java.awt.Color;
 
 
 /**
