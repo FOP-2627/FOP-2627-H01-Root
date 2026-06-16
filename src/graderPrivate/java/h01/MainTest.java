@@ -3,6 +3,8 @@ package h01;
 import fopbot.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.sourcegrade.jagr.api.rubric.TestForSubmission;
 import org.tudalgo.algoutils.tutor.general.SpoonUtils;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
@@ -50,39 +52,36 @@ public class MainTest {
 
 
     // H1.1
-    @Test
-    public void testH1_1() {
-        for (int width : new int[]{7, 9}) {
+    @ParameterizedTest
+    @ValueSource(ints = {7, 9})
+    public void testH1_1(int width) {
+        Robot redRob = new Robot(1, 4, Direction.RIGHT, 7, RobotFamily.SQUARE_RED);
+        Context ctx = worldContext(width);
+        Main.worldWidth = width;
+        Main.worldHeight = 9;
 
-            Robot redRob = new Robot(1, 4, Direction.RIGHT, 7, RobotFamily.SQUARE_RED);
-            Context ctx = worldContext(width);
-            Main.worldWidth = width;
-            Main.worldHeight = 9;
+        try {
+            Main.h1_1(redRob);
 
-            try {
-                Main.h1_1(redRob);
+            Context ctx1 = contextBuilder().add(ctx)
+                .add("expected X", 3).add("actual X", redRob.getX())
+                .add("expected Y", 4).add("actual Y", redRob.getY())
+                .build();
 
-                Context ctx1 = contextBuilder().add(ctx)
-                    .add("expected X", 3).add("actual X", redRob.getX())
-                    .add("expected Y", 4).add("actual Y", redRob.getY())
-                    .build();
+            assertEquals(3, redRob.getX(), ctx1, r -> "redRob should be at X=3");
+            assertEquals(4, redRob.getY(), ctx1, r -> "redRob should be at Y=4");
 
-                assertEquals(3, redRob.getX(), ctx1, r -> "redRob should be at X=3");
-                assertEquals(4, redRob.getY(), ctx1, r -> "redRob should be at Y=4");
+            long coinsAt14 = World.getGlobalWorld().getField(1, 4).getEntities().stream()
+                .filter(e -> e instanceof Coin).count();
+            assertEquals(1, (int) coinsAt14, ctx,
+                r -> "A coin should have been placed at (1,4)");
 
-                long coinsAt14 = World.getGlobalWorld().getField(1, 4).getEntities().stream()
-                    .filter(e -> e instanceof Coin).count();
-                assertEquals(1, (int) coinsAt14, ctx,
-                    r -> "A coin should have been placed at (1,4)");
-
-                long coinsAt24 = World.getGlobalWorld().getField(2, 4).getEntities().stream()
-                    .filter(e -> e instanceof Coin).count();
-                assertEquals(1, (int) coinsAt24, ctx,
-                    r -> "A coin should have been placed at (2,4)");
-
-            } catch (Exception e) {
-                System.err.printf("h1_1(Robot redRob) threw an unexpected exception: %s%n", e);
-            }
+            long coinsAt24 = World.getGlobalWorld().getField(2, 4).getEntities().stream()
+                .filter(e -> e instanceof Coin).count();
+            assertEquals(1, (int) coinsAt24, ctx,
+                r -> "A coin should have been placed at (2,4)");
+        } catch (Exception e) {
+            System.err.printf("h1_1(Robot redRob) threw an unexpected exception: %s%n", e);
         }
     }
 
@@ -97,48 +96,47 @@ public class MainTest {
 
 
     // H1.2
-    @Test
-    public void testH1_2() {
-        for (int width : new int[]{7, 9}) {
-            Robot blueRob = new Robot(width == 7 ? 3 : 4, 1, Direction.UP, 1, RobotFamily.SQUARE_BLUE);
-            Context ctx = worldContext(width);
-            Main.worldWidth = width;
-            Main.worldHeight = 9;
+    @ParameterizedTest
+    @ValueSource(ints = {7, 9})
+    public void testH1_2(int width) {
+        Robot blueRob = new Robot(width == 7 ? 3 : 4, 1, Direction.UP, 1, RobotFamily.SQUARE_BLUE);
+        Context ctx = worldContext(width);
+        Main.worldWidth = width;
+        Main.worldHeight = 9;
 
-            try {
-                Robot result = Main.h1_2(blueRob);
+        try {
+            Robot result = Main.h1_2(blueRob);
 
-                int pos = width == 7 ? 3 : 4;
+            int pos = width == 7 ? 3 : 4;
 
-                // Erster Robot (Boxenstopp)
-                Context ctx1 = contextBuilder().add(ctx)
-                    .add("expected X (blueRob1)", pos - 1).add("actual X", blueRob.getX())
-                    .add("expected Y (blueRob1)", 2).add("actual Y", blueRob.getY())
-                    .build();
-                assertEquals(pos - 1, blueRob.getX(), ctx1, r -> "The first blueRob should be at X=%d during the pit stop".formatted(pos - 1));
-                assertEquals(2, blueRob.getY(), ctx1, r -> "The first blueRob should be at Y=2 during the pit stop");
+            // Erster Robot (Boxenstopp)
+            Context ctx1 = contextBuilder().add(ctx)
+                .add("expected X (blueRob1)", pos - 1).add("actual X", blueRob.getX())
+                .add("expected Y (blueRob1)", 2).add("actual Y", blueRob.getY())
+                .build();
+            assertEquals(pos - 1, blueRob.getX(), ctx1, r -> "The first blueRob should be at X=%d during the pit stop".formatted(pos - 1));
+            assertEquals(2, blueRob.getY(), ctx1, r -> "The first blueRob should be at Y=2 during the pit stop");
 
-                // Zweiter Robot (neues Objekt)
-                Context ctx2 = contextBuilder().add(ctx)
-                    .add("expected X (blueRob2)", pos).add("actual X", result.getX())
-                    .add("expected Y (blueRob2)", 3).add("actual Y", result.getY())
-                    .build();
-                assertEquals(pos, result.getX(), ctx2, r -> "The second blueRob should be at X=%d".formatted(pos));
-                assertEquals(3, result.getY(), ctx2, r -> "The second blueRob should be at Y=3");
+            // Zweiter Robot (neues Objekt)
+            Context ctx2 = contextBuilder().add(ctx)
+                .add("expected X (blueRob2)", pos).add("actual X", result.getX())
+                .add("expected Y (blueRob2)", 3).add("actual Y", result.getY())
+                .build();
+            assertEquals(pos, result.getX(), ctx2, r -> "The second blueRob should be at X=%d".formatted(pos));
+            assertEquals(3, result.getY(), ctx2, r -> "The second blueRob should be at Y=3");
 
-                long coinsAtStart = World.getGlobalWorld().getField(pos, 1).getEntities().stream()
-                    .filter(e -> e instanceof Coin).count();
-                assertEquals(1, (int) coinsAtStart, ctx,
-                    r -> "There should be a coin at (%d,1)".formatted(pos));
+            long coinsAtStart = World.getGlobalWorld().getField(pos, 1).getEntities().stream()
+                .filter(e -> e instanceof Coin).count();
+            assertEquals(1, (int) coinsAtStart, ctx,
+                r -> "There should be a coin at (%d,1)".formatted(pos));
 
-                long coinsAt22 = World.getGlobalWorld().getField(Main.worldWidth / 2, 2).getEntities().stream()
-                    .filter(e -> e instanceof Coin).count();
-                assertEquals(1, (int) coinsAt22, ctx,
-                    r -> "A coin from the second robot should be located at (%d,2)".formatted(Main.worldWidth / 2));
+            long coinsAt22 = World.getGlobalWorld().getField(Main.worldWidth / 2, 2).getEntities().stream()
+                .filter(e -> e instanceof Coin).count();
+            assertEquals(1, (int) coinsAt22, ctx,
+                r -> "A coin from the second robot should be located at (%d,2)".formatted(Main.worldWidth / 2));
 
-            } catch (Exception e) {
-                System.err.printf("h1_2(Robot blueRob) threw an unexpected exception: %s%n", e);
-            }
+        } catch (Exception e) {
+            System.err.printf("h1_2(Robot blueRob) threw an unexpected exception: %s%n", e);
         }
     }
 
@@ -159,38 +157,37 @@ public class MainTest {
 
 
     // H1.3
-    @Test
-    public void testH1_3() {
-        for (int width : new int[]{7, 9}) {
-            Context ctx = worldContext(width);
-            Main.worldWidth = width;
-            Main.worldHeight = 9;
-            World.setSize(width, 9);
+    @ParameterizedTest
+    @ValueSource(ints = {7, 9})
+    public void testH1_3(int width) {
+        Context ctx = worldContext(width);
+        Main.worldWidth = width;
+        Main.worldHeight = 9;
+        World.setSize(width, 9);
 
-            Robot redRob = new Robot(3, 4, Direction.RIGHT, 5, RobotFamily.SQUARE_RED);
+        Robot redRob = new Robot(3, 4, Direction.RIGHT, 5, RobotFamily.SQUARE_RED);
 
-            try {
-                Main.h1_3(redRob);
+        try {
+            Main.h1_3(redRob);
 
-                Context ctx1 = contextBuilder().add(ctx)
-                    .add("expected X", Main.worldWidth - 1).add("actual X", redRob.getX())
-                    .add("expected Y", 4).add("actual Y", redRob.getY())
-                    .build();
-                assertEquals(Main.worldWidth - 1, redRob.getX(), ctx1,
-                    r -> "redRob should be on the wall at X=%d".formatted(Main.worldWidth - 1));
-                assertEquals(4, redRob.getY(), ctx1, r -> "redRob should stay at Y=4");
+            Context ctx1 = contextBuilder().add(ctx)
+                .add("expected X", Main.worldWidth - 1).add("actual X", redRob.getX())
+                .add("expected Y", 4).add("actual Y", redRob.getY())
+                .build();
+            assertEquals(Main.worldWidth - 1, redRob.getX(), ctx1,
+                r -> "redRob should be on the wall at X=%d".formatted(Main.worldWidth - 1));
+            assertEquals(4, redRob.getY(), ctx1, r -> "redRob should stay at Y=4");
 
-                for (int x = 3; x < Main.worldWidth - 1; x++) {
-                    final int fx = x;
-                    long coins = World.getGlobalWorld().getField(x, 4).getEntities().stream()
-                        .filter(e -> e instanceof Coin).count();
-                    assertEquals(1, (int) coins, ctx,
-                        r -> "There should be a coin at (%d,4)".formatted(fx));
-                }
-
-            } catch (Exception e) {
-                System.err.printf("h1_3(Robot redRob) threw an unexpected exception: %s%n", e);
+            for (int x = 3; x < Main.worldWidth - 1; x++) {
+                final int fx = x;
+                long coins = World.getGlobalWorld().getField(x, 4).getEntities().stream()
+                    .filter(e -> e instanceof Coin).count();
+                assertEquals(1, (int) coins, ctx,
+                    r -> "There should be a coin at (%d,4)".formatted(fx));
             }
+
+        } catch (Exception e) {
+            System.err.printf("h1_3(Robot redRob) threw an unexpected exception: %s%n", e);
         }
     }
 
@@ -209,40 +206,39 @@ public class MainTest {
     }
 
     // H1.4
-    @Test
-    public void testH1_4() {
-        for (int width : new int[]{7, 9}) {
-            Context ctx = worldContext(width);
-            Main.worldWidth = width;
-            Main.worldHeight = 9;
-            World.setSize(width, 9);
+    @ParameterizedTest
+    @ValueSource(ints = {7, 9})
+    public void testH1_4(int width) {
+        Context ctx = worldContext(width);
+        Main.worldWidth = width;
+        Main.worldHeight = 9;
+        World.setSize(width, 9);
 
-            Robot blueRob2 = new Robot(width == 7 ? 3 : 4, 3, Direction.UP, 7, RobotFamily.SQUARE_BLUE);
-            int pos = width == 7 ? 3 : 4;
+        Robot blueRob2 = new Robot(width == 7 ? 3 : 4, 3, Direction.UP, 7, RobotFamily.SQUARE_BLUE);
+        int pos = width == 7 ? 3 : 4;
 
-            try {
-                Main.h1_4(blueRob2);
+        try {
+            Main.h1_4(blueRob2);
 
-                Context ctx1 = contextBuilder().add(ctx)
-                    .add("expected X", pos).add("actual X", blueRob2.getX())
-                    .add("expected Y", Main.worldHeight - 1).add("actual Y", blueRob2.getY())
-                    .build();
-                assertEquals(pos, blueRob2.getX(), ctx1,
-                    r -> "blueRob should be at X=%d".formatted(pos));
-                assertEquals(Main.worldHeight - 1, blueRob2.getY(), ctx1,
-                    r -> "blueRob should be at Y=%d".formatted(Main.worldHeight - 1));
+            Context ctx1 = contextBuilder().add(ctx)
+                .add("expected X", pos).add("actual X", blueRob2.getX())
+                .add("expected Y", Main.worldHeight - 1).add("actual Y", blueRob2.getY())
+                .build();
+            assertEquals(pos, blueRob2.getX(), ctx1,
+                r -> "blueRob should be at X=%d".formatted(pos));
+            assertEquals(Main.worldHeight - 1, blueRob2.getY(), ctx1,
+                r -> "blueRob should be at Y=%d".formatted(Main.worldHeight - 1));
 
-                for (int y = 3; y <= 7; y++) {
-                    final int fy = y;
-                    long coins = World.getGlobalWorld().getField(pos, y).getEntities().stream()
-                        .filter(e -> e instanceof Coin).count();
-                    assertEquals(1, (int) coins, ctx,
-                        r -> "There should be a coin at (%d,%d)".formatted(pos, fy));
-                }
-
-            } catch (Exception e) {
-                System.err.printf("h1_4(Robot blueRob2) threw an unexpected exception: %s%n", e);
+            for (int y = 3; y <= 7; y++) {
+                final int fy = y;
+                long coins = World.getGlobalWorld().getField(pos, y).getEntities().stream()
+                    .filter(e -> e instanceof Coin).count();
+                assertEquals(1, (int) coins, ctx,
+                    r -> "There should be a coin at (%d,%d)".formatted(pos, fy));
             }
+
+        } catch (Exception e) {
+            System.err.printf("h1_4(Robot blueRob2) threw an unexpected exception: %s%n", e);
         }
     }
 
@@ -261,20 +257,19 @@ public class MainTest {
     }
 
     // VA for entire H01
-    @Test
-    public void testNoIfOrTernaryVA0() {
-        for (String methodName : List.of("h1_1", "h1_2", "h1_3", "h1_4")) {
-            CtMethod<?> method = getMethod(methodName);
+    @ParameterizedTest
+    @ValueSource(strings = {"h1_1", "h1_2", "h1_3", "h1_4"})
+    public void testNoIfOrTernaryVA0(String methodName) {
+        CtMethod<?> method = getMethod(methodName);
 
-            List<CtIf> ifs = method.filterChildren(e -> e instanceof CtIf).list();
-            List<CtConditional<?>> ternaries = method.filterChildren(e -> e instanceof CtConditional<?>).list();
+        List<CtIf> ifs = method.filterChildren(e -> e instanceof CtIf).list();
+        List<CtConditional<?>> ternaries = method.filterChildren(e -> e instanceof CtConditional<?>).list();
 
-            Context ctx = contextBuilder()
-                .add("Methode", methodName)
-                .build();
+        Context ctx = contextBuilder()
+            .add("Methode", methodName)
+            .build();
 
-            assertEquals(0, ifs.size() + ternaries.size(), ctx,
-                r -> "The ‘%s’ method must not contain any if statements or ternary operators!".formatted(methodName));
-        }
+        assertEquals(0, ifs.size() + ternaries.size(), ctx,
+            r -> "The ‘%s’ method must not contain any if statements or ternary operators!".formatted(methodName));
     }
 }
