@@ -49,9 +49,9 @@ public class MainTest {
     }
 
 
-    // H01.1
+    // H1.1
     @Test
-    public void testH01_1() {
+    public void testH1_1() {
         for (int width : new int[]{7, 9}) {
 
             Robot redRob = new Robot(1, 4, Direction.RIGHT, 7, RobotFamily.SQUARE_RED);
@@ -60,7 +60,7 @@ public class MainTest {
             Main.worldHeight = 9;
 
             try {
-                Main.h01_1(redRob);
+                Main.h1_1(redRob);
 
                 Context ctx1 = contextBuilder().add(ctx)
                     .add("expected X", 3).add("actual X", redRob.getX())
@@ -81,24 +81,24 @@ public class MainTest {
                     r -> "A coin should have been placed at (2,4)");
 
             } catch (Exception e) {
-                System.err.printf("h01_1(Robot redRob) threw an unexpected exception: %s%n", e);
+                System.err.printf("h1_1(Robot redRob) threw an unexpected exception: %s%n", e);
             }
         }
     }
 
     @Test
-    public void testH01_1_oneInstance() {
+    public void testH1_1_oneInstance() {
         Context ctx = worldContext(7);
-        CtMethod<?> method = getMethod("h01_1");
+        CtMethod<?> method = getMethod("h1_1");
         List<CtConstructorCall<?>> newCalls = method.filterChildren(e -> e instanceof CtConstructorCall<?>).list();
         assertEquals(0, newCalls.size(), ctx,
             r -> "Expected exactly one red robot. Did you create a new instance instead of a new reference?");
     }
 
 
-    // H01.2
+    // H1.2
     @Test
-    public void testH01_2() {
+    public void testH1_2() {
         for (int width : new int[]{7, 9}) {
             Robot blueRob = new Robot(width == 7 ? 3 : 4, 1, Direction.UP, 1, RobotFamily.SQUARE_BLUE);
             Context ctx = worldContext(width);
@@ -106,7 +106,7 @@ public class MainTest {
             Main.worldHeight = 9;
 
             try {
-                Robot result = Main.h01_2(blueRob);
+                Robot result = Main.h1_2(blueRob);
 
                 int pos = width == 7 ? 3 : 4;
 
@@ -137,14 +137,14 @@ public class MainTest {
                     r -> "A coin from the second robot should be located at (%d,2)".formatted(Main.worldWidth / 2));
 
             } catch (Exception e) {
-                System.err.printf("h01_2(Robot blueRob) threw an unexpected exception: %s%n", e);
+                System.err.printf("h1_2(Robot blueRob) threw an unexpected exception: %s%n", e);
             }
         }
     }
 
     @Test
-    public void testH01_2_noNewLocalVariableVA2() {
-        CtMethod<?> method = getMethod("h01_2");
+    public void testH1_2_noNewLocalVariableVA2() {
+        CtMethod<?> method = getMethod("h1_2");
         List<CtLocalVariable<?>> locals = method.filterChildren(e -> e instanceof CtLocalVariable<?> lv
             && !((CtLocalVariable<?>) lv).getType().isPrimitive()).list();
 
@@ -158,9 +158,9 @@ public class MainTest {
     }
 
 
-    // H01.3
+    // H1.3
     @Test
-    public void testH01_3() {
+    public void testH1_3() {
         for (int width : new int[]{7, 9}) {
             Context ctx = worldContext(width);
             Main.worldWidth = width;
@@ -170,7 +170,7 @@ public class MainTest {
             Robot redRob = new Robot(3, 4, Direction.RIGHT, 5, RobotFamily.SQUARE_RED);
 
             try {
-                Main.h01_3(redRob);
+                Main.h1_3(redRob);
 
                 Context ctx1 = contextBuilder().add(ctx)
                     .add("expected X", Main.worldWidth - 1).add("actual X", redRob.getX())
@@ -189,28 +189,28 @@ public class MainTest {
                 }
 
             } catch (Exception e) {
-                System.err.printf("h01_3(Robot redRob) threw an unexpected exception: %s%n", e);
+                System.err.printf("h1_3(Robot redRob) threw an unexpected exception: %s%n", e);
             }
         }
     }
 
     @Test
-    public void testH01_3_usesWhileVA3() {
-        CtMethod<?> method = getMethod("h01_3");
+    public void testH1_3_usesWhileVA3() {
+        CtMethod<?> method = getMethod("h1_3");
         List<CtWhile> whileLoops = method.filterChildren(e -> e instanceof CtWhile).list();
         assertTrue(whileLoops.size() > 0, emptyContext(),
-            r -> "H01.3 must contain a while loop");
+            r -> "H1.3 must contain a while loop");
 
         List<CtFor> forLoops = method.filterChildren(e -> e instanceof CtFor).list();
         List<CtForEach> forEachLoops = method.filterChildren(e -> e instanceof CtForEach).list();
         List<CtDo> doLoops = method.filterChildren(e -> e instanceof CtDo).list();
         assertEquals(0, forLoops.size() + forEachLoops.size() + doLoops.size(), emptyContext(),
-            r -> "H01.3 must use only a while loop; do not use a for/do-while loop!");
+            r -> "H1.3 must use only a while loop; do not use a for/do-while loop!");
     }
 
-    // H01.4
+    // H1.4
     @Test
-    public void testH01_4() {
+    public void testH1_4() {
         for (int width : new int[]{7, 9}) {
             Context ctx = worldContext(width);
             Main.worldWidth = width;
@@ -221,7 +221,7 @@ public class MainTest {
             int pos = width == 7 ? 3 : 4;
 
             try {
-                Main.h01_4(blueRob2);
+                Main.h1_4(blueRob2);
 
                 Context ctx1 = contextBuilder().add(ctx)
                     .add("expected X", pos).add("actual X", blueRob2.getX())
@@ -241,29 +241,29 @@ public class MainTest {
                 }
 
             } catch (Exception e) {
-                System.err.printf("h01_4(Robot blueRob2) threw an unexpected exception: %s%n", e);
+                System.err.printf("h1_4(Robot blueRob2) threw an unexpected exception: %s%n", e);
             }
         }
     }
 
     @Test
-    public void testH01_4_usesForVA4() {
-        CtMethod<?> method = getMethod("h01_4");
+    public void testH1_4_usesForVA4() {
+        CtMethod<?> method = getMethod("h1_4");
         List<CtFor> forLoops = method.filterChildren(e -> e instanceof CtFor).list();
         assertTrue(forLoops.size() > 0, emptyContext(),
-            r -> "H01.4 must contain a for loop");
+            r -> "H1.4 must contain a for loop");
 
         List<CtWhile> whileLoops = method.filterChildren(e -> e instanceof CtWhile).list();
         List<CtForEach> forEachLoops = method.filterChildren(e -> e instanceof CtForEach).list();
         List<CtDo> doLoops = method.filterChildren(e -> e instanceof CtDo).list();
         assertEquals(0, whileLoops.size() + forEachLoops.size() + doLoops.size(), emptyContext(),
-            r -> "H01.4 must use only a for loop; do not use while or do-while loops!");
+            r -> "H1.4 must use only a for loop; do not use while or do-while loops!");
     }
 
     // VA for entire H01
     @Test
     public void testNoIfOrTernaryVA0() {
-        for (String methodName : List.of("h01_1", "h01_2", "h01_3", "h01_4")) {
+        for (String methodName : List.of("h1_1", "h1_2", "h1_3", "h1_4")) {
             CtMethod<?> method = getMethod(methodName);
 
             List<CtIf> ifs = method.filterChildren(e -> e instanceof CtIf).list();

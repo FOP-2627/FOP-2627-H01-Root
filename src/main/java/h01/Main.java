@@ -3,6 +3,7 @@ package h01;
 import fopbot.*;
 import fopbot.Robot;
 import org.tudalgo.algoutils.student.annotation.DoNotTouch;
+import org.tudalgo.algoutils.student.annotation.StudentImplementationRequired;
 
 import java.awt.*;
 
@@ -24,14 +25,15 @@ public class Main {
         Robot redRob = new Robot(1, 4, Direction.RIGHT, 7, RobotFamily.SQUARE_RED);
         Robot blueRob = new Robot(worldWidth == 7 ? 3 : 4, 1, Direction.UP, 1, RobotFamily.SQUARE_BLUE);
 
-        h01_1(redRob);
-        blueRob = h01_2(blueRob);
-        h01_3(redRob);
-        h01_4(blueRob);
+        h1_1(redRob);
+        blueRob = h1_2(blueRob);
+        h1_3(redRob);
+        h1_4(blueRob);
     }
 
-    public static void h01_1(Robot redRob) {
-        //TODO: H01.1 - mehrere Referenzen auf einen Robot
+    @StudentImplementationRequired("H1.1")
+    public static void h1_1(Robot redRob) {
+        //TODO: H1.1 - mehrere Referenzen auf einen Robot
         redRob.putCoin();
         redRob.move();
 
@@ -40,8 +42,9 @@ public class Main {
         redRob2.move();
     }
 
-    public static Robot h01_2(Robot blueRob) {
-        //TODO: H01.2 - eine Referenz für mehrere Roboter
+    @StudentImplementationRequired("H1.2")
+    public static Robot h1_2(Robot blueRob) {
+        //TODO: H1.2 - eine Referenz für mehrere Roboter
         blueRob.putCoin();
         blueRob.move();
 
@@ -58,16 +61,18 @@ public class Main {
         return blueRob;
     }
 
-    public static void h01_3(Robot redRob) {
-        //TODO: H01.3 - While-Schleife
+    @StudentImplementationRequired("H1.3")
+    public static void h1_3(Robot redRob) {
+        //TODO: H1.3 - While-Schleife
         while (redRob.isFrontClear()) {
             redRob.putCoin();
             redRob.move();
         }
     }
 
-    public static void h01_4(Robot blueRob) {
-        //TODO: H01.4 - For-Schleife
+    @StudentImplementationRequired("H1.4")
+    public static void h1_4(Robot blueRob) {
+        //TODO: H1.4 - For-Schleife
         for (int i = 0; i < 5; i++) {
             blueRob.putCoin();
             blueRob.move();
