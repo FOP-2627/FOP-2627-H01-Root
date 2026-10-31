@@ -1,9 +1,12 @@
 package h01;
 
+import org.objectweb.asm.*;
 import org.sourcegrade.jagr.api.rubric.Criterion;
 import org.sourcegrade.jagr.api.rubric.JUnitTestRef;
 import org.sourcegrade.jagr.api.rubric.Rubric;
 import org.sourcegrade.jagr.api.rubric.RubricProvider;
+import org.sourcegrade.jagr.api.testing.ClassTransformer;
+import org.sourcegrade.jagr.api.testing.RubricConfiguration;
 
 import static org.tudalgo.algoutils.tutor.general.jagr.RubricUtils.criterion;
 
@@ -83,5 +86,43 @@ public class H01_RubricProviderPrivate implements RubricProvider {
     @Override
     public Rubric getRubric() {
         return RUBRIC;
+    }
+
+    @Override
+    public void configure(RubricConfiguration configuration) {
+        configuration.addTransformer(new ClassTransformer() {
+            @Override
+            public String getName() {
+                return "setupWorldTransformer";
+            }
+
+            @Override
+            public void transform(ClassReader reader, ClassWriter writer) {
+                if (reader.getClassName().equals("h01/Main")) {
+                    reader.accept(new ClassVisitor(Opcodes.ASM9, writer) {
+                        @Override
+                        public MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
+                            MethodVisitor mv = super.visitMethod(access, name, descriptor, signature, exceptions);
+                            if (name.equals("setupWorld") && descriptor.equals("()V")) {
+                                return new MethodVisitor(Opcodes.ASM9, mv) {
+                                    @Override
+                                    public void visitFieldInsn(int opcode, String owner, String name, String descriptor) {
+                                        if (opcode == Opcodes.PUTSTATIC) {
+                                            super.visitInsn(Opcodes.POP);
+                                        } else {
+                                            super.visitFieldInsn(opcode, owner, name, descriptor);
+                                        }
+                                    }
+                                };
+                            } else {
+                                return mv;
+                            }
+                        }
+                    }, 0);
+                } else {
+                    reader.accept(writer, 0);
+                }
+            }
+        });
     }
 }
